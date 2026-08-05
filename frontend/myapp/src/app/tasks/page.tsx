@@ -1,69 +1,75 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type {Task} from "../types/task";
 
-type Task = 
-{
-  id: number;
-  status: string;
-  priority: string;
-  title: string;
-};
-
-export default function TaskPage()
- {
+export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  useEffect(() => 
-    {
-    async function loadTasks() 
-    {
+  useEffect(() => {
+    async function loadTasks() {
       const url = process.env.NEXT_PUBLIC_API_URL;
 
-      if (!url) 
-        {
-        throw new Error("API URL is missing");
+      if (!url) {
+        setError("API URL is missing.");
+        setLoading(false);
+        return;
       }
 
-      const response = await fetch(`${url}/tasks`);
+      try {
+        const response = await fetch(`${url}/tasks`);
 
-      if (!response.ok) 
-        {
-        throw new Error("cannot fetch");
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks.");
+        }
+
+        const list: Task[] = await response.json();
+
+        setTasks(list);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to fetch tasks.");
+      } finally {
+        setLoading(false);
       }
-
-      const list: Task[] = await response.json();
-
-      setTasks(list);
     }
 
     loadTasks();
-  },[]);
+  }, []);
 
-  const task = tasks[index];
-
-  function next() 
-  {
-    if (index < tasks.length - 1)
-       {
+  function next() {
+    if (index < tasks.length - 1) {
       setIndex(index + 1);
     }
   }
 
-  function previous()
-   {
-    if (index > 0) 
-      {
+  function previous() {
+    if (index > 0) {
       setIndex(index - 1);
     }
   }
 
-  if (!task) 
-    {
-    return <p>No tasks</p>;
+  // Loading state
+  if (loading) {
+    return <p>Loading tasks...</p>;
   }
 
+  // Error state
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  // Empty state
+  if (tasks.length === 0) {
+    return <p>No tasks available.</p>;
+  }
+
+  const task = tasks[index];
+
+  // Success state
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 text-center">
@@ -77,6 +83,7 @@ export default function TaskPage()
         <div className="flex justify-center gap-4">
           <button
             onClick={previous}
+            disabled={index === 0}
             className="bg-green-600 text-white border border-green-700 px-4 py-2 rounded-md disabled:bg-gray-400"
           >
             Previous
@@ -84,6 +91,7 @@ export default function TaskPage()
 
           <button
             onClick={next}
+            disabled={index === tasks.length - 1}
             className="bg-green-600 text-white border border-green-700 px-4 py-2 rounded-md disabled:bg-gray-400"
           >
             Next

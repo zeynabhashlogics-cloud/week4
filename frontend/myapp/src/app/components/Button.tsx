@@ -1,6 +1,7 @@
 "use client";
 
-type ButtonProps = {
+type ButtonProps =
+ {
   children: React.ReactNode;
   onClick?: () => void;
 };
