@@ -5,13 +5,13 @@ This project is a full-stack Task Manager application built to practice modern w
 
 ## Features
 
--View all tasks
--View a single task by ID (/tasks/:id)
--Navigate between tasks using Previous and Next buttons
--Health check endpoint
--Error handling for invalid and missing tasks
--Environment variables
--CORS enabled for frontend-backend communication
+- View all tasks
+- View a single task by ID (/tasks/:id)
+- Navigate between tasks using Previous and Next buttons
+- Health check endpoint
+- Error handling for invalid and missing tasks
+- Environment variables
+- CORS enabled for frontend-backend communication
 
 ## Frontend
 - Next.js 
