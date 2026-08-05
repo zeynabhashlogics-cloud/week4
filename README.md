@@ -14,15 +14,15 @@ This project is a full-stack Task Manager application built to practice modern w
 -CORS enabled for frontend-backend communication
 
 ## Frontend
-Next.js 
-React 
-TypeScript
-Tailwind CSS
+- Next.js 
+- React 
+- TypeScript
+- Tailwind CSS
 
 ## Backend
-Node.js
-Express.js
-JavaScript (ES Modules)
+- Node.js
+- Express.js
+- JavaScript (ES Modules)
 dotenv
 CORS
 
