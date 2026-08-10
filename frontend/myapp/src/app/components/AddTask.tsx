@@ -55,16 +55,14 @@ export default function AddTask()
       const data = await response.json();
 
       if (!response.ok) {
-        console.log(data.message);
+       
         return;
       }
 
     
-
-      clearform();
     
     } catch (error) {
-      console.log("Task not added", error);
+      console.log("error");
     }
   }
 
