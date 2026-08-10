@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function UpdateTask({ task }: Props) {
-  const [form, setForm] = useState(false);
+  
 
   const [title, setTitle] = useState(task.title);
   const [status, setStatus] = useState(task.status);
@@ -50,7 +50,7 @@ export default function UpdateTask({ task }: Props) {
 
       console.log("Task updated =", data);
 
-      setForm(false);
+ 
     } catch (error) {
       console.log("Task not updated", error);
     }
@@ -65,14 +65,7 @@ export default function UpdateTask({ task }: Props) {
 
   return (
     <div>
-      {!form ? (
-        <button
-          onClick={() => setForm(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md"
-        >
-          Edit Task
-        </button>
-      ) : (
+      
         <form onSubmit={updateTask}>
 
           <h2 className="text-xl font-bold mb-4">
@@ -148,7 +141,7 @@ export default function UpdateTask({ task }: Props) {
               type="button"
               onClick={() => {
                 resetform();
-                setForm(false);
+          
               }}
           
             >
@@ -157,7 +150,7 @@ export default function UpdateTask({ task }: Props) {
 
           </div>
         </form>
-      )}
+      
     </div>
   );
 }
