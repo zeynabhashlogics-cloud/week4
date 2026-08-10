@@ -16,7 +16,7 @@ export default function AddTask()
   const [statusError, setStatError] = useState("");
 
   // function for when user submits the form
-  async function SubmitForm() 
+  async function Submit() 
   {
     
     // Inline validatio
@@ -77,13 +77,14 @@ export default function AddTask()
     newtitle("");
     newstatus("");
 
-    // clear form to empty values
+    // clears form to empty values
   }
 
   return (
     <div>
       
-        <form onSubmit={SubmitForm}>
+        <form onSubmit={Submit}>
+      
           <h2 className="text-xl font-bold mb-4">Add Task</h2>
 
           <div>
@@ -164,4 +165,5 @@ export default function AddTask()
     </div>
   );
 }
+
 
