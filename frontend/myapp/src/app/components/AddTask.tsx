@@ -4,8 +4,7 @@ import { useState } from "react";
 
 export default function AddTask() 
 {
-  const [form, setform] = useState(false);
-
+  
   // stores title status and priority values
   const [title, newtitle] = useState("");
   const [priority, newpriority] = useState("");
@@ -63,7 +62,7 @@ export default function AddTask()
     
 
       clearform();
-      setform(false);
+    
     } catch (error) {
       console.log("Task not added", error);
     }
@@ -83,11 +82,7 @@ export default function AddTask()
 
   return (
     <div>
-      {!form ? (
-        <button onClick={() => setform(true)}>
-          Add Task
-        </button>
-      ) : (
+      
         <form onSubmit={SubmitForm}>
           <h2 className="text-xl font-bold mb-4">Add Task</h2>
 
@@ -160,15 +155,13 @@ export default function AddTask()
             type="button"
             onClick={() => {
               clearform();
-              setform(false);
             }}
           >
             Cancel
           </button>
         </form>
-      )}
+      
     </div>
   );
 }
-
 
