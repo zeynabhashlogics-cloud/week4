@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -132,19 +133,13 @@ return (
     
     <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 mt-8">
 
-      <h2 className="text-xl font-bold text-center mb-6">
-        Add a New Task
-      </h2>
-
       <AddTask />
 
     </div>
 
 
   <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 mt-8">
-    <h2 className = "text-xl font-bold text-center mb-6">
-      Update a task 
-      </h2>
+   
     <UpdateTask task={task}/>
   </div>
     </div>
