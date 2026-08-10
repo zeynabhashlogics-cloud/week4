@@ -25,3 +25,15 @@ Express.js
 JavaScript (ES Modules)
 dotenv
 CORS
+
+
+## API Endpoints
+
+| Method | URL | Body | Response |
+
+|---|---|---|---|
+| GET | `/tasks` | None | Returns all tasks |
+| GET | `/tasks/:id` | None | Returns a single task |
+| POST | `/tasks` | `{ "title", "status", "priority" }` | Creates a new task |
+| PATCH | `/tasks/:id` | `{ "title", "status", "priority" }` | Updates an existing task |
+| DELETE | `/tasks/:id` | None | Deletes a task |
