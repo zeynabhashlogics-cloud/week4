@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -16,7 +15,29 @@ export default function TaskPage() {
   // checks if data is loading or not // true or false
   const [error, setError] = useState("");
 // checks if any error message
+async function deletetask(id: number) {
+  const url = process.env.NEXT_PUBLIC_API_URL;
+
+  try {
+    const response = await fetch(`${url}/tasks/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete task.");
+    }
+
+    const newTasks = tasks.filter((task) => task.id !== id);
+
+    setTasks(newTasks);
+    setIndex(0);
+
+  } catch (error) {
+    console.error(error);
+  }
+}
   useEffect(() => 
+    
     {
     async function loadTasks() {
   // async as it is an asynchronous function
@@ -126,6 +147,12 @@ return (
         >
           Next
         </button>
+        <button
+  onClick={() => deletetask(task.id)}
+  className="bg-red-600 text-white px-4 py-2 rounded-md"
+>
+  Delete
+</button>
       </div>
 
     </div>
