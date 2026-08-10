@@ -15,7 +15,8 @@ export default function TaskPage() {
   // checks if data is loading or not // true or false
   const [error, setError] = useState("");
 // checks if any error message
-  useEffect(() => {
+  useEffect(() => 
+    {
     async function loadTasks() {
   // async as it is an asynchronous function
       const url = process.env.NEXT_PUBLIC_API_URL;
@@ -105,6 +106,7 @@ return (
         <p className="mb-2">Status: {task.status}</p>
         <p className="mb-2">Priority: {task.priority}</p>
         <p>Title: {task.title}</p>
+
       </div>
 
       <div className="flex justify-center gap-4">
@@ -126,9 +128,8 @@ return (
       </div>
 
     </div>
-
-
-    {/* ADD TASK BOX */}
+ 
+    
     <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 mt-8">
 
       <h2 className="text-xl font-bold text-center mb-6">
