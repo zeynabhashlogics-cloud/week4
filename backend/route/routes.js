@@ -52,7 +52,7 @@ router.post("/tasks", (req, res) =>
       message: "Invalid status",
     });
   }
-const maxID;
+let maxID;
 
 if (tasks.length > 0) 
   {
