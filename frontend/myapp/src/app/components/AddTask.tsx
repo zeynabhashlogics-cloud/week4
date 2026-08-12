@@ -1,38 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import type { Task } from "../types/task";
 
-export default function AddTask() 
-{
-  
-  // stores title status and priority values
-  const [title, newtitle] = useState("");
-  const [priority, newpriority] = useState("");
-  const [status, newstatus] = useState("");
+type Props = {
+  Added: (task: Task) => void;
+};
 
-  // stores the error messages
+export default function AddTask({ Added }: Props) {
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+
   const [titleError, setTitleError] = useState("");
   const [prioError, setPrioError] = useState("");
-  const [statusError, setStatError] = useState("");
+  const [statusError, setStatusError] = useState("");
 
-  // function for when user submits the form
-  async function Submit() 
-  {
-    
-    // Inline validatio
-    // //title validationn
-    if (title.trim() === "") {
+  const [apiError, setApiError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  async function Submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setTitleError("");
+    setPrioError("");
+    setStatusError("");
+    setApiError("");
+    setSuccessMessage("");
+
+    // Validation
+    if (!title.trim()) {
       setTitleError("Title is required");
       return;
     }
-//priority validation
+
     if (!["low", "medium", "high"].includes(priority)) {
       setPrioError("Invalid priority");
       return;
     }
-// status validation
+
     if (!["pending", "completed"].includes(status)) {
-      setStatError("Invalid status");
+      setStatusError("Invalid status");
       return;
     }
 
@@ -45,7 +53,7 @@ export default function AddTask()
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            title,
+            title: title.trim(),
             status,
             priority,
           }),
@@ -55,113 +63,129 @@ export default function AddTask()
       const data = await response.json();
 
       if (!response.ok) {
-       
+        setApiError(data.message || "Failed to add task");
         return;
       }
 
-    
-    
+      Added(data);
+      setSuccessMessage("Task added successfully");
+      clearForm();
+
     } catch (error) {
-      console.log("error");
+      console.error(error);
+      setApiError("Unable to connect to the server");
     }
   }
 
-  function clearform() 
-  {
-    setStatError("");
-    setPrioError("");
-    setTitleError("");
-    newpriority("");
-    newtitle("");
-    newstatus("");
+  function clearForm() {
+    setTitle("");
+    setPriority("");
+    setStatus("");
 
-    // clears form to empty values
+    setTitleError("");
+    setPrioError("");
+    setStatusError("");
   }
 
   return (
-    <div>
-      
-        <form onSubmit={Submit}>
-      
-          <h2 className="text-xl font-bold mb-4">Add Task</h2>
+    <form onSubmit={Submit}>
 
-          <div>
-            <label>Title</label>
+      <h2 className="text-xl font-bold mb-4">
+        Add Task
+      </h2>
 
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => {
-                newtitle(e.target.value);
-                setTitleError("");
-              }}
-              placeholder="  task title"
-            />
+      {apiError && (
+        <p className="text-red-600 mb-3">
+          {apiError}
+        </p>
+      )}
 
-            {titleError && <p>{titleError}</p>}
-          </div>
+      {successMessage && (
+        <p className="text-green-600 mb-3">
+          {successMessage}
+        </p>
+      )}
 
-          <div>
-        
+      {/* Title */}
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          setTitleError("");
+          setApiError("");
+        }}
+        placeholder="Task title"
+        className="border rounded-md p-2 w-full mb-1"
+      />
 
-            <select
-              value={priority}
-              onChange={(e) => {
-                newpriority(e.target.value);
-                setPrioError("");
-              }}
-            >
-              <option value="">Select priority</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
+      {titleError && (
+        <p className="text-red-600 mb-3">
+          {titleError}
+        </p>
+      )}
 
-            {prioError && <p>{prioError}</p>}
-          </div>
+      {/* Priority */}
+      <select
+        value={priority}
+        onChange={(e) => {
+          setPriority(e.target.value);
+          setPrioError("");
+          setApiError("");
+        }}
+        className="border rounded-md p-2 w-full mb-1"
+      >
+        <option value="">Select priority</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
 
-    
-          <div>
-       
-            <select
-              value={status}
-              onChange={(e) => {
-                newstatus(e.target.value);
-                setStatError("");
-              }}
-            >
-              <option value="">Select status</option>
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
-            </select>
+      {prioError && (
+        <p className="text-red-600 mb-3">
+          {prioError}
+        </p>
+      )}
 
-            {statusError && <p>{statusError}</p>}
-          </div>
+      {/* Status */}
+      <select
+        value={status}
+        onChange={(e) => {
+          setStatus(e.target.value);
+          setStatusError("");
+          setApiError("");
+        }}
+        className="border rounded-md p-2 w-full mb-1"
+      >
+        <option value="">Select status</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+      </select>
 
+      {statusError && (
+        <p className="text-red-600 mb-3">
+          {statusError}
+        </p>
+      )}
 
-          <button type="submit">
-            Submit
-          </button>
+      {/* Buttons */}
+      <div className="flex gap-2 justify-center mt-4">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-5 py-2 rounded-md"
+        >
+          Submit
+        </button>
 
-          <button
-            type="button"
-            onClick={clearform}
-          >
-            Clear
-          </button>
+        <button
+          type="button"
+          onClick={clearForm}
+          className="bg-green-600 text-white px-5 py-2 rounded-md"
+        >
+          Clear
+        </button>
+      </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              clearform();
-            }}
-          >
-            Cancel
-          </button>
-        </form>
-      
-    </div>
+    </form>
   );
 }
-
-

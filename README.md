@@ -29,9 +29,7 @@ CORS
 
 ## API Endpoints
 
-| Method | URL | Body | Response |
 
-|---|---|---|---|
 | GET | `/tasks` | None | Returns all tasks |
 | GET | `/tasks/:id` | None | Returns a single task |
 | POST | `/tasks` | `{ "title", "status", "priority" }` | Creates a new task |

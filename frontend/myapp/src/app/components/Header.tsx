@@ -2,7 +2,8 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-green-600 text-white px-6 py-4 shadow-md">
+    <header className="bg-[#7fb5ae] text-white px-6 py-4 shadow-md">
+      
 
       <ul className="flex gap-6 items-center">
 

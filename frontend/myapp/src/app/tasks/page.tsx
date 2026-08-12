@@ -1,50 +1,60 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {Task} from "../types/task";
+import type { Task } from "../types/task";
 import UpdateTask from "../components/UpdateTask";
 import AddTask from "../components/AddTask";
 
-// importing add task function from addform
 export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  // stores all the tasks which we fetch from backend
   const [index, setIndex] = useState(0);
-  // stores the current index of current task
+
   const [loading, setLoading] = useState(true);
-  // checks if data is loading or not // true or false
   const [error, setError] = useState("");
-// checks if any error message
-async function deletetask(id: number) {
-  const url = process.env.NEXT_PUBLIC_API_URL;
 
-  try {
-    const response = await fetch(`${url}/tasks/${id}`, {
-      method: "DELETE",
-    });
+  async function deleteTask(id: number) {
+    const url = process.env.NEXT_PUBLIC_API_URL;
 
-    if (!response.ok) {
-      throw new Error("Failed to delete task.");
+    try {
+      const response = await fetch(`${url}/tasks/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete task.");
+      }
+
+      const newTasks = tasks.filter((task) => task.id !== id);
+
+      setTasks(newTasks);
+
+      // Keep index valid after deleting
+      setIndex((currentIndex) =>
+        Math.min(
+          currentIndex,
+          Math.max(newTasks.length - 1, 0)
+        )
+      );
+
+      setError("");
+    } catch (error) {
+      console.error(error);
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to delete task."
+      );
     }
-
-    const newTasks = tasks.filter((task) => task.id !== id);
-
-    setTasks(newTasks);
-    setIndex(0);
-
-  } catch (error) {
-    console.error(error);
   }
-}
-  useEffect(() => 
-    
-    {
+
+  useEffect(() => {
     async function loadTasks() {
-  // async as it is an asynchronous function
       const url = process.env.NEXT_PUBLIC_API_URL;
 
-      if (!url) 
-        {
+      if (!url) {
         setError("URL is missing.");
         setLoading(false);
         return;
@@ -60,15 +70,15 @@ async function deletetask(id: number) {
         const list: Task[] = await response.json();
 
         setTasks(list);
-      } 
-      catch (error)
-       {
+      } catch (error) {
         console.error(error);
-        //prints what error occured on the console
-        setError("Failed to fetch tasks.");
-      } 
-      finally 
-      {
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch tasks."
+        );
+      } finally {
         setLoading(false);
       }
     }
@@ -76,99 +86,137 @@ async function deletetask(id: number) {
     loadTasks();
   }, []);
 
-  function next()
-   {
-    if (index < tasks.length - 1)
-      // goes to next index like if 2<4 so 2+1=3 moves to third index if true
-       {
+  function next() {
+    if (index < tasks.length - 1) {
       setIndex(index + 1);
     }
   }
 
   function previous() {
-    if (index > 0)
-      // goes to previous task if possible as long as index is greater than zero 
-  {
+    if (index > 0) {
       setIndex(index - 1);
     }
   }
 
-  // Loading state
-  if (loading)
-  {
-    // if the loading state is true diplays that tasks are loading
-    return <p>Loading tasks</p>;
+
+  function TaskAdded(newTask: Task) {
+    setTasks((prev) => [...prev, newTask]);
+    setIndex(tasks.length);
+    setError("");
   }
 
-  // Error state
-  if (error) 
-  {
-    return <p>{error}</p>;
+
+  function TaskUpdated(updatedTask: Task) {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === updatedTask.id
+          ? updatedTask
+          : task
+      )
+    );
+
+    setError("");
   }
 
-  // Empty state
-  if (tasks.length === 0) 
-  {   
-    // if no length of tasks array means its empty
-    return <p>No tasks available.</p>;
+  if (loading) {
+    return <p>Loading tasks...</p>;
   }
 
-  const task = tasks[index];
-  // will store the current task on screen from the task array
-  //like task = tasks[3] on third index will store task 4 
-  // Success state
-return (
-  <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
+  return (
+    <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
 
-    {/* CURRENT TASK BOX */}
-    <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 text-center">
+      {error && (
+        <p className="text-red-600 mb-6">
+          {error}
+        </p>
+      )}
 
-      <div className="mb-6">
-        <p className="mb-2">ID: {task.id}</p>
-        <p className="mb-2">Status: {task.status}</p>
-        <p className="mb-2">Priority: {task.priority}</p>
-        <p>Title: {task.title}</p>
+      {tasks.length === 0 ? (
+        <div className="w-[500px] bg-white border border-gray-300 rounded-lg p-10">
+          <p className="text-center mb-6">
+            No tasks available.
+          </p>
 
-      </div>
+          <AddTask Added={TaskAdded} />
+        </div>
+      ) : (
+        <>
+         
+          <div className="bg-[#ceebd3] border border-gray-300 shadow-lg rounded-lg p-10 w-[800px] text-center">
 
-      <div className="flex justify-center gap-4">
-        <button
-          onClick={previous}
-          disabled={index === 0}
-          className="bg-green-600 text-white border border-green-700 px-4 py-2 rounded-md disabled:bg-gray-400"
-        >
-          Previous
-        </button>
+            <div className="mb-6">
+              <p className="mb-2">
+                ID: {tasks[index].id}
+              </p>
 
-        <button
-          onClick={next}
-          disabled={index === tasks.length - 1}
-          className="bg-green-600 text-white border border-green-700 px-4 py-2 rounded-md disabled:bg-gray-400"
-        >
-          Next
-        </button>
-        <button
-  onClick={() => deletetask(task.id)}
-  className="bg-red-600 text-white px-4 py-2 rounded-md"
->
-  Delete
-</button>
-      </div>
+              <p className="mb-2">
+                Status: {tasks[index].status}
+              </p>
+
+              <p className="mb-2">
+                Priority: {tasks[index].priority}
+              </p>
+
+              <p>
+                Title: {tasks[index].title}
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-4">
+
+              <button
+                onClick={previous}
+                disabled={index === 0}
+                className="bg-green-400 text-black border border-blue-400 px-4 py-2 rounded-md disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+
+              <button
+                onClick={next}
+                disabled={index === tasks.length - 1}
+                className="bg-green-600 text-white border border-green-700 px-4 py-2 rounded-md disabled:bg-gray-400"
+              >
+                Next
+              </button>
+
+              <button
+                onClick={() => {
+                  const confirmDelete = window.confirm(
+                    "Delete this task?"
+                  );
+
+                  if (confirmDelete) {
+                    deleteTask(tasks[index].id);
+                  }
+                }}
+                className="bg-red-600 text-white px-4 py-2 rounded-md"
+              >
+                Delete
+              </button>
+
+            </div>
+          </div>
+
+          <div className="flex gap-6 justify-center items-start mt-8">
+
+            <div className="w-[385px] bg-white rounded-lg p-10 text-center">
+              <AddTask
+                Added={TaskAdded}
+              />
+            </div>
+
+            <div className="w-[385px] bg-white rounded-lg p-10 text-center">
+              <UpdateTask
+                task={tasks[index]}
+                Updated={TaskUpdated}
+              />
+            </div>
+
+          </div>
+        </>
+      )}
 
     </div>
- 
-    
-    <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 mt-8">
-
-      <AddTask />
-
-    </div>
-
-
-  <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-8 w-96 mt-8">
-   
-    <UpdateTask task={task}/>
-  </div>
-    </div>
-);
+  );
 }
