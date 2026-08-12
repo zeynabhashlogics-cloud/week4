@@ -15,7 +15,8 @@ router.get("/tasks", (req, res) => {
 
 
 
-router.post("/tasks", (req, res) => {
+router.post("/tasks", (req, res) =>
+   {
   const { title, status, priority } = req.body;
 
   if (
@@ -38,23 +39,32 @@ router.post("/tasks", (req, res) => {
     });
   }
 
-  if (!validPriority.includes(cleanPriority)) {
+  if (!validPriority.includes(cleanPriority))
+     {
     return res.status(400).json({
       message: "Invalid priority",
     });
   }
 
-  if (!validStatus.includes(cleanStatus)) {
+  if (!validStatus.includes(cleanStatus))
+     {
     return res.status(400).json({
       message: "Invalid status",
     });
   }
+const maxID;
 
-  const maxID = tasks.length
-    ? Math.max(...tasks.map((task) => task.id))
-    : 0;
+if (tasks.length > 0) 
+  {
+  maxID = Math.max(...tasks.map((task) => task.id));
+  } 
+else
+  {
+  maxID = 0;
+  }
 
-  const newTask = {
+  const newTask =
+  {
     id: maxID + 1,
     title: cleanTitle,
     status: cleanStatus,
@@ -69,20 +79,23 @@ router.post("/tasks", (req, res) => {
 
 
 
-router.get("/tasks/:id", (req, res) => {
+router.get("/tasks/:id", (req, res) =>
+   {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!Number.isInteger(id) || id < 1)
+     {
     return res.status(400).json({
-      message: "ID must be a positive integer",
+      message: "not a positive integer",
     });
   }
 
   const task = tasks.find((task) => task.id === id);
 
-  if (!task) {
+  if (!task)
+     {
     return res.status(404).json({
-      message: "No task found with this ID",
+      message: "No task",
     });
   }
 
@@ -92,27 +105,32 @@ router.get("/tasks/:id", (req, res) => {
 
 
 
-router.patch("/tasks/:id", (req, res) => {
+router.patch("/tasks/:id", (req, res) =>
+   {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!Number.isInteger(id) || id < 1)
+     {
     return res.status(400).json({
-      message: "ID must be a positive integer",
+      message: "not a positive integer",
     });
   }
 
   const task = tasks.find((task) => task.id === id);
 
-  if (!task) {
+  if (!task)
+    {
     return res.status(404).json({
-      message: "No task found with this ID",
+      message: "No task",
     });
   }
 
   const { title, status, priority } = req.body;
 
-  if (title !== undefined) {
-    if (typeof title !== "string" || !title.trim()) {
+  if (title !== undefined)
+     {
+    if (typeof title !== "string" || !title.trim())
+       {
       return res.status(400).json({
         message: "Invalid title",
       });
@@ -121,11 +139,10 @@ router.patch("/tasks/:id", (req, res) => {
     task.title = title.trim();
   }
 
-  if (status !== undefined) {
-    if (
-      typeof status !== "string" ||
-      !validStatus.includes(status.trim())
-    ) {
+  if (status !== undefined)
+     {
+    if ( typeof status !== "string" || !validStatus.includes(status.trim()) ) 
+      {
       return res.status(400).json({
         message: "Invalid status",
       });
@@ -134,11 +151,11 @@ router.patch("/tasks/:id", (req, res) => {
     task.status = status.trim();
   }
 
-  if (priority !== undefined) {
+  if (priority !== undefined) 
+    {
     if (
-      typeof priority !== "string" ||
-      !validPriority.includes(priority.trim())
-    ) {
+      typeof priority !== "string" || !validPriority.includes(priority.trim()))
+       {
       return res.status(400).json({
         message: "Invalid priority",
       });
@@ -146,17 +163,16 @@ router.patch("/tasks/:id", (req, res) => {
 
     task.priority = priority.trim();
   }
-
   res.json(task);
 });
 
 
-
-
-router.delete("/tasks/:id", (req, res) => {
+router.delete("/tasks/:id", (req, res) => 
+  {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!Number.isInteger(id) || id < 1) 
+    {
     return res.status(400).json({
       message: "ID must be a positive integer",
     });
@@ -164,16 +180,17 @@ router.delete("/tasks/:id", (req, res) => {
 
   const index = tasks.findIndex((task) => task.id === id);
 
-  if (index === -1) {
+  if (index< 0) 
+    {
     return res.status(404).json({
-      message: "No task found with this ID",
+      message: "No task",
     });
   }
 
   const deleted = tasks.splice(index, 1);
 
   res.json({
-    message: "Task deleted successfully",
+    message: "Task deleted",
     task: deleted[0],
   });
 });
