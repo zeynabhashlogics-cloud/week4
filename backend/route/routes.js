@@ -13,43 +13,42 @@ router.get("/tasks", (req, res) => {
 });
 
 
-
-
 router.post("/tasks", (req, res) =>
    {
   const { title, status, priority } = req.body;
 
-  if (
-    typeof title !== "string" ||
-    typeof status !== "string" ||
-    typeof priority !== "string"
-  ) {
-    return res.status(400).json({
-      message: "title, status and priority must be strings",
+  if ( typeof title !== "string" || typeof status !== "string" || typeof priority !== "string") 
+    {
+    return res.status(400).json(
+      {
+      message: "error",
     });
   }
 
-  const cleanTitle = title.trim();
-  const cleanStatus = status.trim();
-  const cleanPriority = priority.trim();
+  const newTitle = title.trim();
+  const newStatus = status.trim();
+  const newPriority = priority.trim();
 
-  if (!cleanTitle) {
-    return res.status(400).json({
-      message: "Title is required",
-    });
-  }
-
-  if (!validPriority.includes(cleanPriority))
+  if (!newTitle)
      {
     return res.status(400).json({
-      message: "Invalid priority",
+      message: "no title",
     });
   }
 
-  if (!validStatus.includes(cleanStatus))
+  if (!validPriority.includes(newPriority))
      {
-    return res.status(400).json({
-      message: "Invalid status",
+    return res.status(400).json(
+      {
+      message: "invalid priority",
+    });
+  }
+
+  if (!validStatus.includes(newStatus))
+     {
+    return res.status(400).json(
+      {
+      message: "invalid status",
     });
   }
 let maxID;
@@ -66,17 +65,15 @@ else
   const newTask =
   {
     id: maxID + 1,
-    title: cleanTitle,
-    status: cleanStatus,
-    priority: cleanPriority,
+    title: newTitle,
+    status: newStatus,
+    priority: newPriority,
   };
 
   tasks.push(newTask);
 
   res.status(201).json(newTask);
 });
-
-
 
 
 router.get("/tasks/:id", (req, res) =>
