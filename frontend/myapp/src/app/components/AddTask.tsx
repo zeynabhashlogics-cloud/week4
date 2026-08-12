@@ -28,7 +28,7 @@ export default function AddTask({ Added }: Props) {
     setApiError("");
     setSuccessMessage("");
 
-    // Validation
+  
     if (!title.trim()) {
       setTitleError("Title is required");
       return;
@@ -77,7 +77,8 @@ export default function AddTask({ Added }: Props) {
     }
   }
 
-  function clearForm() {
+  function clearForm() 
+  {
     setTitle("");
     setPriority("");
     setStatus("");
@@ -106,7 +107,7 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-      {/* Title */}
+    
       <input
         type="text"
         value={title}
@@ -125,7 +126,7 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-      {/* Priority */}
+  
       <select
         value={priority}
         onChange={(e) => {
@@ -147,7 +148,7 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-      {/* Status */}
+  
       <select
         value={status}
         onChange={(e) => {
@@ -168,7 +169,7 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-      {/* Buttons */}
+    
       <div className="flex gap-2 justify-center mt-4">
         <button
           type="submit"

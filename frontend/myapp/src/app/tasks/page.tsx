@@ -30,7 +30,6 @@ export default function TaskPage() {
 
       setTasks(newTasks);
 
-      // Keep index valid after deleting
       setIndex((currentIndex) =>
         Math.min(
           currentIndex,
@@ -42,11 +41,14 @@ export default function TaskPage() {
     } catch (error) {
       console.error(error);
 
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to delete task."
-      );
+     if (error instanceof Error)
+       {
+  setError(error.message);
+}    
+else 
+  {
+  setError("error");
+}
     }
   }
 
@@ -72,13 +74,14 @@ export default function TaskPage() {
         setTasks(list);
       } catch (error) {
         console.error(error);
-
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch tasks."
-        );
-      } finally {
+if (error instanceof Error) {
+  setError(error.message);
+} else {
+  setError("Failed to error");
+}
+      } 
+      finally
+       {
         setLoading(false);
       }
     }
@@ -86,42 +89,50 @@ export default function TaskPage() {
     loadTasks();
   }, []);
 
-  function next() {
-    if (index < tasks.length - 1) {
+  function next() 
+  {
+    if (index < tasks.length - 1) 
+    {
       setIndex(index + 1);
     }
   }
 
-  function previous() {
-    if (index > 0) {
+  function previous() 
+  {
+    if (index > 0) 
+    {
       setIndex(index - 1);
     }
   }
 
 
-  function TaskAdded(newTask: Task) {
+  function TaskAdded(newTask: Task) 
+  {
     setTasks((prev) => [...prev, newTask]);
     setIndex(tasks.length);
     setError("");
   }
 
 
-  function TaskUpdated(updatedTask: Task) {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === updatedTask.id
-          ? updatedTask
-          : task
-      )
-    );
+ function TaskUpdated(updatedTask: Task) {
+  setTasks((prev) => {
+    const newTasks = prev.map((task) => {
+      if (task.id === updatedTask.id) {
+        return updatedTask;
+      } else {
+        return task;
+      }
+    });
 
-    setError("");
-  }
+    return newTasks;
+  });
 
+  setError("");
+}
   if (loading) {
     return <p>Loading tasks...</p>;
   }
-
+ 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
 

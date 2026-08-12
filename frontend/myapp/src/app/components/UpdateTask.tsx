@@ -17,7 +17,7 @@ export default function UpdateTask({ task, Updated }: Props) {
   const [apiError, setApiError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Update form when selected task changes
+
   useEffect(() => {
     setTitle(task.title);
     setStatus(task.status);
@@ -73,7 +73,8 @@ export default function UpdateTask({ task, Updated }: Props) {
     }
   }
 
-  function resetForm() {
+  function resetForm() 
+  {
     setTitle(task.title);
     setStatus(task.status);
     setPriority(task.priority);
@@ -101,7 +102,7 @@ export default function UpdateTask({ task, Updated }: Props) {
         </p>
       )}
 
-      {/* Title */}
+ 
       <div className="mb-4">
         <label className="block mb-1">
           Title
@@ -125,7 +126,7 @@ export default function UpdateTask({ task, Updated }: Props) {
         )}
       </div>
 
-      {/* Status */}
+      
       <div className="mb-4">
         <label className="block mb-1">
           Status
@@ -144,7 +145,7 @@ export default function UpdateTask({ task, Updated }: Props) {
         </select>
       </div>
 
-      {/* Priority */}
+    
       <div className="mb-4">
         <label className="block mb-1">
           Priority
@@ -164,7 +165,7 @@ export default function UpdateTask({ task, Updated }: Props) {
         </select>
       </div>
 
-      {/* Buttons */}
+    
       <div className="flex gap-2 justify-center">
         <button
           type="submit"
