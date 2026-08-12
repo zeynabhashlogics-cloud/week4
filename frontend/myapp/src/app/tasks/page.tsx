@@ -12,17 +12,20 @@ export default function TaskPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function deleteTask(id: number) {
+  async function deleteTask(id: number) 
+  {
     const url = process.env.NEXT_PUBLIC_API_URL;
 
     try {
-      const response = await fetch(`${url}/tasks/${id}`, {
+      const response = await fetch(`${url}/tasks/${id}`,
+         {
         method: "DELETE",
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (!response.ok)
+         {
         throw new Error(data.message || "Failed to delete task.");
       }
 
@@ -30,15 +33,17 @@ export default function TaskPage() {
 
       setTasks(newTasks);
 
-      setIndex((currentIndex) =>
-        Math.min(
-          currentIndex,
-          Math.max(newTasks.length - 1, 0)
-        )
-      );
+      if (newTasks.length === 0) 
+        {
+  setIndex(0);
+} else if (index >= newTasks.length)
+   {
+  setIndex(newTasks.length - 1);
+}
 
       setError("");
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error);
 
      if (error instanceof Error)
@@ -52,7 +57,8 @@ else
     }
   }
 
-  useEffect(() => {
+  useEffect(() => 
+    {
     async function loadTasks() {
       const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -72,12 +78,15 @@ else
         const list: Task[] = await response.json();
 
         setTasks(list);
-      } catch (error) {
+      } catch (error) 
+      {
         console.error(error);
-if (error instanceof Error) {
+if (error instanceof Error) 
+  {
   setError(error.message);
-} else {
-  setError("Failed to error");
+} else 
+  {
+  setError("error");
 }
       } 
       finally
@@ -114,12 +123,17 @@ if (error instanceof Error) {
   }
 
 
- function TaskUpdated(updatedTask: Task) {
-  setTasks((prev) => {
-    const newTasks = prev.map((task) => {
-      if (task.id === updatedTask.id) {
+ function TaskUpdated(updatedTask: Task) 
+ {
+  setTasks((prev) => 
+    {
+    const newTasks = prev.map((task) => 
+      {
+      if (task.id === updatedTask.id)
+         {
         return updatedTask;
-      } else {
+      } else 
+        {
         return task;
       }
     });

@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import type { Task } from "../types/task";
 
-type Props = {
+type Props = 
+{
   task: Task;
   Updated: (task: Task) => void;
 };
 
-export default function UpdateTask({ task, Updated }: Props) {
+export default function UpdateTask({ task, Updated }: Props) 
+{
   const [title, setTitle] = useState(task.title);
   const [status, setStatus] = useState(task.status);
   const [priority, setPriority] = useState(task.priority);
@@ -27,16 +29,16 @@ export default function UpdateTask({ task, Updated }: Props) {
     setSuccessMessage("");
   }, [task]);
 
-  async function updateTask(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
+  async function updateTask( event: React.FormEvent<HTMLFormElement>)
+   {
     event.preventDefault();
 
     setTitleError("");
     setApiError("");
     setSuccessMessage("");
 
-    if (!title.trim()) {
+    if (!title.trim()) 
+      {
       setTitleError("Title is required");
       return;
     }
@@ -59,7 +61,8 @@ export default function UpdateTask({ task, Updated }: Props) {
 
       const data = await response.json();
 
-      if (!response.ok) {
+      if (!response.ok) 
+        {
         setApiError(data.message || "Failed to update task");
         return;
       }
@@ -67,7 +70,9 @@ export default function UpdateTask({ task, Updated }: Props) {
       Updated(data);
       setSuccessMessage("Task updated successfully");
 
-    } catch (error) {
+    }
+     catch (error)
+     {
       console.error(error);
       setApiError("Unable to connect to the server");
     }
