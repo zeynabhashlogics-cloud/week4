@@ -110,14 +110,16 @@ export default function AddTask({ Added }: Props) {
     
       <input
         type="text"
+         
         value={title}
+      
         onChange={(e) => {
           setTitle(e.target.value);
           setTitleError("");
           setApiError("");
         }}
         placeholder="Task title"
-        className="border rounded-md p-2 w-full mb-1"
+        className="border rounded-md p-2 w-full mb-1 bg-[#8ebd55] border p-2 rounded-md"
       />
 
       {titleError && (
@@ -134,7 +136,7 @@ export default function AddTask({ Added }: Props) {
           setPrioError("");
           setApiError("");
         }}
-        className="border rounded-md p-2 w-full mb-1"
+        className="border rounded-md p-2 w-full bg-[#4e9cad] mb-1"
       >
         <option value="">Select priority</option>
         <option value="low">Low</option>
@@ -156,7 +158,7 @@ export default function AddTask({ Added }: Props) {
           setStatusError("");
           setApiError("");
         }}
-        className="border rounded-md p-2 w-full mb-1"
+        className="border rounded-md p-2 w-full mb-1 bg-[#d8e080]"
       >
         <option value="">Select status</option>
         <option value="pending">Pending</option>

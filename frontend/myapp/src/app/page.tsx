@@ -2,17 +2,20 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center">
+    <main className="min-h-screen bg-[#dbd0b8] flex items-center justify-center">
       <div className="bg-[#6591a6]  border rounded-lg  p-25 w-[900px] text-center">
         
-        <h1 className="text-5xl font-bold mb-4 text-white">
+        <h1 className="text-5xl font-bold mb-4 text-white text-left">
           Plan Less.
         </h1>
-        <h1 className="text-5xl font-bold mb-12 text-white">
+        <h1 className="text-5xl font-bold mb-12 text-white text-left ">
           Finish More.
         </h1>
+        <p className= "italic mb-4 text-bold text-s text-left">A calm workspace to create, update, and clear your
+          <br/>
+           tasks - connected to a real Express API.</p>
 
-        <div className="flex justify-center gap-6">
+        <div className="flex gap-6 ">
           
           <Link
             href="/about"

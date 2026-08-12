@@ -148,8 +148,11 @@ if (error instanceof Error)
   }
  
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
 
+    <div className="min-h-screen flex flex-col items-center bg-[#e8ebca] py-10">
+<h1 className="text-3xl font-bold text-left mb-6">
+  Your Tasks
+</h1>
       {error && (
         <p className="text-red-600 mb-6">
           {error}
@@ -157,7 +160,7 @@ if (error instanceof Error)
       )}
 
       {tasks.length === 0 ? (
-        <div className="w-[500px] bg-white border border-gray-300 rounded-lg p-10">
+        <div className="w-[500px] bg-white border rounded-lg p-10">
           <p className="text-center mb-6">
             No tasks available.
           </p>
@@ -167,22 +170,22 @@ if (error instanceof Error)
       ) : (
         <>
          
-          <div className="bg-[#ceebd3] border border-gray-300 shadow-lg rounded-lg p-10 w-[800px] text-center">
+          <div className="bg-[#ceebd3] border border-gray-300 shadow-lg shadow-lgmx-auto rounded-lg p-10 w-[800px] text-center">
 
-            <div className="mb-6">
-              <p className="mb-2">
+            <div className="mb-6 ">
+              <p className="mb-2 bg-yellow-100 text-brown-700 w-[200px] mx-auto py-1 rounded-lg text-xs font-semibold">
                 ID: {tasks[index].id}
               </p>
 
-              <p className="mb-2">
+              <p className="mb-2 bg-yellow-100 text-brown-700 w-[200px] py-1 mx-auto rounded-lg text-xs font-semibold">
                 Status: {tasks[index].status}
               </p>
 
-              <p className="mb-2">
+              <p className="mb-2 bg-yellow-100 text-brown-700 py-1 w-[200px] mx-auto rounded-lg text-xs font-semibold">
                 Priority: {tasks[index].priority}
               </p>
 
-              <p>
+              <p className="bg-yellow-100 text-brown-700 py-1 mx-auto rounded-lg w-[200px] text-xs font-semibold">
                 Title: {tasks[index].title}
               </p>
             </div>
@@ -192,7 +195,7 @@ if (error instanceof Error)
               <button
                 onClick={previous}
                 disabled={index === 0}
-                className="bg-green-400 text-black border border-blue-400 px-4 py-2 rounded-md disabled:bg-gray-300"
+                className="bg-blue-400 text-white border border-blue-400 px-4 py-2 rounded-md disabled:bg-gray-300"
               >
                 Previous
               </button>
@@ -223,15 +226,15 @@ if (error instanceof Error)
             </div>
           </div>
 
-          <div className="flex gap-6 justify-center items-start mt-8">
+          <div className="flex gap-6 shadow-lg justify-center items-start mt-8">
 
-            <div className="w-[385px] bg-white rounded-lg p-10 text-center">
+            <div className="w-[385px] bg-[#c9e3aa] shadow-lg rounded-lg p-10 border-gray-400 text-center">
               <AddTask
                 Added={TaskAdded}
               />
             </div>
 
-            <div className="w-[385px] bg-white rounded-lg p-10 text-center">
+            <div className="w-[385px] bg-[#c9e3aa] shadow-lg rounded-lg p-10 border-gray-400 text-center">
               <UpdateTask
                 task={tasks[index]}
                 Updated={TaskUpdated}

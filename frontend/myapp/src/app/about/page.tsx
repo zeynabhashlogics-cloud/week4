@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <main className="min-h-screen bg-[#f3f8f4] p-8">
+    <main className="min-h-screen bg-[#b8ccd1] p-8">
 
       <div className="max-w-5xl mx-auto bg-[#176b4d] rounded-2xl p-10 mb-6">
         <h1 className="text-4xl font-bold text-white mb-8">

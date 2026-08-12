@@ -121,7 +121,7 @@ export default function UpdateTask({ task, Updated }: Props)
             setTitleError("");
             setApiError("");
           }}
-          className="border rounded-md p-2 w-full"
+          className="border rounded-md p-2 w-full bg-[#8ebd55]"
         />
 
         {titleError && (
@@ -143,7 +143,7 @@ export default function UpdateTask({ task, Updated }: Props)
             setStatus(e.target.value);
             setApiError("");
           }}
-          className="border rounded-md p-2 w-full"
+          className="border rounded-md p-2 w-full bg-[#4e9cad]"
         >
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
@@ -162,7 +162,7 @@ export default function UpdateTask({ task, Updated }: Props)
             setPriority(e.target.value);
             setApiError("");
           }}
-          className="border rounded-md p-2 w-full"
+          className="border rounded-md p-2 w-full bg-[#d8e080]"
         >
           <option value="low">Low</option>
           <option value="medium">Medium</option>
