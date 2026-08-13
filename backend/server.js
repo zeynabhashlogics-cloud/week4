@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import routes from "./route/routes.js";
 import dotenv from "dotenv";
+import pool from "./db.js";
 
 dotenv.config();
 
@@ -26,6 +27,16 @@ app.use((req, res) =>
   res.status(404).json({
     message: "Route not found",
   });
+});
+
+
+pool.query("SELECT NOW()", (error, result) => {
+  if (error) {
+    console.error("Database connection failed:", error);
+  } else {
+    console.log("Database connected!");
+    console.log(result.rows);
+  }
 });
 
 app.listen(PORT, () => 

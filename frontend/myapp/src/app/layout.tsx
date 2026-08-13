@@ -10,7 +10,9 @@ export default function Layout({
     <html lang="en">
       <body>
         <Header />
+        <main>
         {children}
+        </main>
       </body>
     </html>
   );

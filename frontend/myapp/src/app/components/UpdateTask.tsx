@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Task } from "../types/task";
+import type { prioritytype, statustype, Task } from "../types/task";
 
 type Props = 
 {
@@ -140,7 +140,7 @@ export default function UpdateTask({ task, Updated }: Props)
         <select
           value={status}
           onChange={(e) => {
-            setStatus(e.target.value);
+            setStatus(e.target.value as statustype);
             setApiError("");
           }}
           className="border rounded-md p-2 w-full bg-[#4e9cad]"
@@ -159,7 +159,7 @@ export default function UpdateTask({ task, Updated }: Props)
         <select
           value={priority}
           onChange={(e) => {
-            setPriority(e.target.value);
+            setPriority(e.target.value as prioritytype);
             setApiError("");
           }}
           className="border rounded-md p-2 w-full bg-[#d8e080]"

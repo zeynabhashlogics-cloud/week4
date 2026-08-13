@@ -21,7 +21,7 @@ router.post("/tasks", (req, res) =>
     {
     return res.status(400).json(
       {
-      message: "error",
+      message: "title, status and priority must be string",
     });
   }
 
@@ -32,7 +32,7 @@ router.post("/tasks", (req, res) =>
   if (!newTitle)
      {
     return res.status(400).json({
-      message: "no title",
+      message: "title is required",
     });
   }
 
@@ -40,7 +40,7 @@ router.post("/tasks", (req, res) =>
      {
     return res.status(400).json(
       {
-      message: "invalid priority",
+      message: "priority should be low, medium or high",
     });
   }
 
@@ -48,7 +48,7 @@ router.post("/tasks", (req, res) =>
      {
     return res.status(400).json(
       {
-      message: "invalid status",
+      message: "status should be low or pending",
     });
   }
 let maxID;
@@ -83,7 +83,7 @@ router.get("/tasks/:id", (req, res) =>
   if (!Number.isInteger(id) || id < 1)
      {
     return res.status(400).json({
-      message: "not a positive integer",
+      message: "ID is not a positive integer",
     });
   }
 
@@ -92,7 +92,7 @@ router.get("/tasks/:id", (req, res) =>
   if (!task)
      {
     return res.status(404).json({
-      message: "No task",
+      message: "No tasks found",
     });
   }
 
@@ -109,7 +109,7 @@ router.patch("/tasks/:id", (req, res) =>
   if (!Number.isInteger(id) || id < 1)
      {
     return res.status(400).json({
-      message: "not a positive integer",
+      message: "ID is not a positive integer",
     });
   }
 
@@ -118,7 +118,7 @@ router.patch("/tasks/:id", (req, res) =>
   if (!task)
     {
     return res.status(404).json({
-      message: "No task",
+      message: "No tasks found",
     });
   }
 
@@ -129,7 +129,7 @@ router.patch("/tasks/:id", (req, res) =>
     if (typeof title !== "string" || !title.trim())
        {
       return res.status(400).json({
-        message: "Invalid title",
+        message: "title is not valid",
       });
     }
 
@@ -141,20 +141,20 @@ router.patch("/tasks/:id", (req, res) =>
     if ( typeof status !== "string" || !validStatus.includes(status.trim()) ) 
       {
       return res.status(400).json({
-        message: "Invalid status",
+        message: "status must pending or completed and a string",
       });
     }
 
     task.status = status.trim();
   }
-
+2
   if (priority !== undefined) 
     {
     if (
       typeof priority !== "string" || !validPriority.includes(priority.trim()))
        {
       return res.status(400).json({
-        message: "Invalid priority",
+        message: "priority must be low , medium or high and a string",
       });
     }
 
@@ -180,7 +180,7 @@ router.delete("/tasks/:id", (req, res) =>
   if (index< 0) 
     {
     return res.status(404).json({
-      message: "No task",
+      message: "No task found",
     });
   }
 
