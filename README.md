@@ -27,38 +27,6 @@ The application allows users to create, view, update, and delete tasks. The back
 * Git
 * npm
 
-## Project Structure
-
-project/
-│
-├── backend/
-│   ├── data/
-│   │   └── tasks.js
-│   ├── routes/
-│   │   └── tasks.js
-│   ├── .env
-│   ├── .env.example
-│   ├── .gitignore
-│   ├── package.json
-│   └── server.js
-│
-└── frontend/
-    └── myapp/
-        ├── app/
-        │   ├── layout.tsx
-        │   └── ...
-        ├── components/
-        │   ├── AddTask.tsx
-        │   ├── UpdateTask.tsx
-        │   └── Header.tsx
-        ├── types/
-        │   └── task.ts
-        ├── .env
-        ├── .env.example
-        ├── .gitignore
-        ├── package.json
-        └── postcss.config.mjs
-
 # Features
 
 * View tasks
@@ -78,22 +46,21 @@ project/
 
 Each task contains:
 
-id
-title
-status
-priority
-
+* id
+* title
+* status
+* priority
 
 The allowed status values are:
 
-pending
-completed
+* pending
+* completed
 
 The allowed priority values are:
 
-low
-medium
-high
+* low
+* medium
+* high
 
 # TypeScript Types
 
