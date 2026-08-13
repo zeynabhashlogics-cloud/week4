@@ -159,7 +159,8 @@ if (error instanceof Error)
         </p>
       )}
 
-      {tasks.length === 0 ? (
+      {tasks.length === 0 ?
+       (
         <div className="w-[500px] bg-white border rounded-lg p-10">
           <p className="text-center mb-6">
             No tasks available.

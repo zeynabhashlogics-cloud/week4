@@ -442,58 +442,7 @@ This helps React correctly recreate the component when the displayed task change
 
 This is especially useful when `UpdateTask` contains its own state.
 
----
-
-# Semantic HTML
-
-The header navigation is wrapped in a `<nav>` element:
-
-```tsx
-<header>
-  <nav>
-    <Link href="/">Home</Link>
-    <Link href="/about">About</Link>
-    <Link href="/tasks">Tasks</Link>
-  </nav>
-</header>
-```
-
-The main page content is wrapped in `<main>` inside `layout.tsx`:
-
-```tsx
-<body>
-  <Header />
-
-  <main>
-    {children}
-  </main>
-</body>
-```
-
-These elements improve semantic structure and accessibility.
-
----
-
-# Button Component
-
-If a reusable `Button.tsx` component is kept, it should support appropriate button properties such as `type` and `disabled`.
-
-Example:
-
-```tsx
-type ButtonProps = {
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
-  children: React.ReactNode;
-  onClick?: () => void;
-};
-```
-
-If the component is not used anywhere in the project, it can be removed instead of keeping unused code.
-
----
-
-# Tailwind CSS
+# tailwind
 
 The frontend uses Tailwind CSS for styling.
 
