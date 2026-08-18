@@ -56,6 +56,7 @@ export default function AddTask({ Added }: Props) {
             title: title.trim(),
             status,
             priority,
+            
           }),
         }
       );

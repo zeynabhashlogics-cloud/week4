@@ -1,195 +1,254 @@
 import express from "express";
-import tasks from "../data/tasks.js";
+import "dotenv/config";
+
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const router = express.Router();
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const prisma = new PrismaClient({ adapter });
 
 const validPriority = ["low", "medium", "high"];
 const validStatus = ["pending", "completed"];
 
+// GET all tasks
+router.get("/tasks", async (req, res) => {
+  try {
+    const tasks = await prisma.tasks.findMany();
 
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
 
-router.get("/tasks", (req, res) => {
-  res.json(tasks);
+    res.status(500).json({
+      message: "Did not fetch tasks",
+    });
+  }
 });
 
 
-router.post("/tasks", (req, res) =>
-   {
+router.post("/tasks", async (req, res) => {
   const { title, status, priority } = req.body;
 
-  if ( typeof title !== "string" || typeof status !== "string" || typeof priority !== "string") 
-    {
-    return res.status(400).json(
-      {
-      message: "title, status and priority must be string",
-    });
-  }
-
-  const newTitle = title.trim();
-  const newStatus = status.trim();
-  const newPriority = priority.trim();
-
-  if (!newTitle)
-     {
+  if (
+    typeof title !== "string" ||
+    typeof status !== "string" ||
+    typeof priority !== "string"
+  ) {
     return res.status(400).json({
-      message: "title is required",
+      message: "title, status and priority must be strings",
     });
   }
 
-  if (!validPriority.includes(newPriority))
-     {
-    return res.status(400).json(
-      {
-      message: "priority should be low, medium or high",
+  if (!validStatus.includes(status.trim())) {
+    return res.status(400).json({
+      message: "status must be pending or completed",
     });
   }
 
-  if (!validStatus.includes(newStatus))
-     {
-    return res.status(400).json(
-      {
-      message: "status should be low or pending",
+  if (!validPriority.includes(priority.trim())) {
+    return res.status(400).json({
+      message: "priority must be low, medium or high",
     });
   }
-let maxID;
 
-if (tasks.length > 0) 
-  {
-  maxID = Math.max(...tasks.map((task) => task.id));
-  } 
-else
-  {
-  maxID = 0;
+  if (!title.trim()) {
+    return res.status(400).json({
+      message: "title cannot be empty",
+    });
   }
 
-  const newTask =
-  {
-    id: maxID + 1,
-    title: newTitle,
-    status: newStatus,
-    priority: newPriority,
-  };
+  try {
+    // Find the first user
+    let user = await prisma.user.findFirst();
 
-  tasks.push(newTask);
+    // If no user exists, create one
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          name: "Test User",
+          age: 20,
+        },
+      });
+    }
 
-  res.status(201).json(newTask);
+    // Create the task for that user
+    const task = await prisma.tasks.create({
+      data: {
+        title: title.trim(),
+        status: status.trim(),
+        priority: priority.trim(),
+        userId: user.id,
+      },
+    });
+
+    res.status(201).json(task);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to create task",
+      error: String(error),
+    });
+  }
 });
 
 
-router.get("/tasks/:id", (req, res) =>
-   {
+router.get("/tasks/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id < 1)
-     {
+  if (!Number.isInteger(id) || id < 1) {
     return res.status(400).json({
       message: "ID is not a positive integer",
     });
   }
 
-  const task = tasks.find((task) => task.id === id);
+  try {
+    const task = await prisma.tasks.findUnique({
+      where: {
+        id: id,
+      },
+    });
 
-  if (!task)
-     {
-    return res.status(404).json({
-      message: "No tasks found",
+    if (!task) {
+      return res.status(404).json({
+        message: "No task found",
+      });
+    }
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to fetch task",
+      error: error.message,
     });
   }
-
-  res.json(task);
 });
 
-
-
-
-router.patch("/tasks/:id", (req, res) =>
-   {
+// PATCH a task
+router.patch("/tasks/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id < 1)
-     {
+  if (!Number.isInteger(id) || id < 1) {
     return res.status(400).json({
       message: "ID is not a positive integer",
     });
   }
 
-  const task = tasks.find((task) => task.id === id);
+  const { title, status, priority } = req.body;
 
-  if (!task)
-    {
-    return res.status(404).json({
-      message: "No tasks found",
+  if (title === undefined && status === undefined && priority === undefined) {
+    return res.status(400).json({
+      message: "At least one field is required",
     });
   }
 
-  const { title, status, priority } = req.body;
-
-  if (title !== undefined)
-     {
-    if (typeof title !== "string" || !title.trim())
-       {
+  if (title !== undefined) {
+    if (typeof title !== "string" || !title.trim()) {
       return res.status(400).json({
         message: "title is not valid",
       });
     }
-
-    task.title = title.trim();
   }
 
-  if (status !== undefined)
-     {
-    if ( typeof status !== "string" || !validStatus.includes(status.trim()) ) 
-      {
-      return res.status(400).json({
-        message: "status must pending or completed and a string",
-      });
-    }
-
-    task.status = status.trim();
-  }
-2
-  if (priority !== undefined) 
-    {
+  if (status !== undefined) {
     if (
-      typeof priority !== "string" || !validPriority.includes(priority.trim()))
-       {
+      typeof status !== "string" ||
+      !validStatus.includes(status.trim())
+    ) {
       return res.status(400).json({
-        message: "priority must be low , medium or high and a string",
+        message: "status must be pending or completed",
+      });
+    }
+  }
+
+  if (priority !== undefined) {
+    if (
+      typeof priority !== "string" ||
+      !validPriority.includes(priority.trim())
+    ) {
+      return res.status(400).json({
+        message: "priority must be low, medium or high",
+      });
+    }
+  }
+
+  try {
+    const task = await prisma.tasks.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...(title !== undefined && {
+          title: title.trim(),
+        }),
+        ...(status !== undefined && {
+          status: status.trim(),
+        }),
+        ...(priority !== undefined && {
+          priority: priority.trim(),
+        }),
+      },
+    });
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        message: "No task found",
       });
     }
 
-    task.priority = priority.trim();
+    res.status(500).json({
+      message: "Failed to update task",
+      error: error.message,
+    });
   }
-  res.json(task);
 });
 
-
-router.delete("/tasks/:id", (req, res) => 
-  {
+// DELETE a task
+router.delete("/tasks/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  if (!Number.isInteger(id) || id < 1) 
-    {
+  if (!Number.isInteger(id) || id < 1) {
     return res.status(400).json({
       message: "ID must be a positive integer",
     });
   }
 
-  const index = tasks.findIndex((task) => task.id === id);
+  try {
+    const deletedTask = await prisma.tasks.delete({
+      where: {
+        id: id,
+      },
+    });
 
-  if (index< 0) 
-    {
-    return res.status(404).json({
-      message: "No task found",
+    res.json({
+      message: "Task deleted",
+      task: deletedTask,
+    });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        message: "No task found",
+      });
+    }
+
+    res.status(500).json({
+      message: "Failed to delete task",
+      error: error.message,
     });
   }
-
-  const deleted = tasks.splice(index, 1);
-
-  res.json({
-    message: "Task deleted",
-    task: deleted[0],
-  });
 });
 
 export default router;
