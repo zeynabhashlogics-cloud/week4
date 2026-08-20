@@ -15,13 +15,14 @@ const prisma = new PrismaClient({ adapter });
 const validPriority = ["low", "medium", "high"];
 const validStatus = ["pending", "completed"];
 
-// GET all tasks
 router.get("/tasks", async (req, res) => {
   try {
     const tasks = await prisma.tasks.findMany();
 
     res.json(tasks);
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error(error);
 
     res.status(500).json({
@@ -63,11 +64,12 @@ router.post("/tasks", async (req, res) => {
   }
 
   try {
-    // Find the first user
+    
     let user = await prisma.user.findFirst();
 
-    // If no user exists, create one
-    if (!user) {
+    
+    if (!user)
+       {
       user = await prisma.user.create({
         data: {
           name: "Test User",
@@ -76,7 +78,6 @@ router.post("/tasks", async (req, res) => {
       });
     }
 
-    // Create the task for that user
     const task = await prisma.tasks.create({
       data: {
         title: title.trim(),
@@ -131,7 +132,6 @@ router.get("/tasks/:id", async (req, res) => {
   }
 });
 
-// PATCH a task
 router.patch("/tasks/:id", async (req, res) => {
   const id = Number(req.params.id);
 
@@ -214,7 +214,6 @@ router.patch("/tasks/:id", async (req, res) => {
   }
 });
 
-// DELETE a task
 router.delete("/tasks/:id", async (req, res) => {
   const id = Number(req.params.id);
 

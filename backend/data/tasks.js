@@ -1,5 +1,5 @@
 
-const tasks = [
+/*const tasks = [
   {
     id: 1,
     status: "pending",
@@ -32,4 +32,4 @@ const tasks = [
   }
 ];
 
-export default tasks;
+export default tasks;*/

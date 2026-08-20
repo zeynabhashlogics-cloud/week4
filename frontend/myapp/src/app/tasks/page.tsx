@@ -149,7 +149,7 @@ if (error instanceof Error)
  
   return (
 
-    <div className="min-h-screen flex flex-col items-center bg-[#e8ebca] py-10">
+    <div className="min-h-screen flex flex-col items-center bg-[#e0e8cf] py-10">
 <h1 className="text-3xl font-bold text-left mb-6">
   Your Tasks
 </h1>
@@ -170,7 +170,7 @@ if (error instanceof Error)
       ) : (
         <>
          
-          <div className="bg-[#ceebd3] border shadow-lg shadow-lgmx-auto rounded-lg p-10 w-[800px] text-center">
+          <div className="bg-[#9fb079] shadow-lg rounded-lg p-10 w-[800px] text-center">
 
             <div className="mb-6 ">
               <p className="mb-2 bg-yellow-100 text-brown-700 w-[200px] mx-auto py-1 rounded-lg text-xs font-semibold">
@@ -228,13 +228,13 @@ if (error instanceof Error)
 
           <div className="flex gap-6  justify-center items-start mt-8">
 
-            <div className="w-[385px] bg-[#c9e3aa] shadow-lg rounded-lg p-10  text-center">
+            <div className="w-[385px] bg-[#91a1c9] shadow-lg rounded-lg p-10  text-center">
               <AddTask
                 Added={TaskAdded}
               />
             </div>
 
-            <div className="w-[385px] bg-[#c9e3aa] shadow-lg rounded-lg p-10 border-gray-400 text-center">
+            <div className="w-[385px] bg-[#91a1c9] shadow-lg rounded-lg p-10 border-gray-400 text-center">
               <UpdateTask
               key={tasks[index].id}
                 task={tasks[index]}
