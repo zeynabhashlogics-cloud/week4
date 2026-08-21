@@ -8,7 +8,7 @@ export default function About() {
           <br />
           built to learn full-stack flow.
         </h1>
-<p className="text-bold text-white">Taskline is a Week 4 practice project: a Next.js frontend talking to an 
+<p className="text-white font-bold">Taskline is a Week 4 practice project: a Next.js frontend talking to an 
     Express API. It is small on purpose - so every create, read, update, 
     and delete feels clear and intentional.</p>
       </div>
@@ -39,8 +39,6 @@ export default function About() {
 
       </div>
 
-
-      {/* Three smaller boxes */}
       <div className="max-w-5xl mx-auto">
 
         <h2 className="text-2xl font-bold mb-4 text-[#176b4d]">
@@ -77,7 +75,7 @@ export default function About() {
 
       </div>
 
-< div className="max-w-5xl mx-auto bg-[#176b4d] rounded-2xl p-10 mb-6 mt-6">
+<div className="max-w-5xl mx-auto bg-[#176b4d] rounded-2xl p-10 mb-6 mt-6">
         <h1 className="text-2xl font-bold text-white mb-4">
         SKILLS BEHIND THE SCREEN
         </h1>
@@ -98,7 +96,7 @@ export default function About() {
       </p>
     </div>
  <div className="bg-[#c4cfbe] rounded-lg p-4 w-full">
-      <p>How environmental variable leep API URLs
+      <p>How environmental variable Keep API URLs
         configurable
       </p>
     </div>

@@ -117,10 +117,13 @@ if (error instanceof Error)
 
   function TaskAdded(newTask: Task) 
   {
-    setTasks((prev) => [...prev, newTask]);
-    setIndex(tasks.length);
-    setError("");
-  }
+    setTasks((prev) => {
+      const newtasks = [...prev, newTask];
+    setIndex(newtasks.length -1);
+    return newtasks;
+  });
+  setError("");
+}
 
 
  function TaskUpdated(updatedTask: Task) 
@@ -170,22 +173,22 @@ if (error instanceof Error)
       ) : (
         <>
          
-          <div className="bg-[#9fb079] shadow-lg rounded-lg p-10 w-[800px] text-center">
+          <div className="bg-[#9fb079] shadow-lg text-center rounded-lg p-10 w-[800px]">
 
             <div className="mb-6 ">
-              <p className="mb-2 bg-yellow-100 text-brown-700 w-[200px] mx-auto py-1 rounded-lg text-xs font-semibold">
+              <p className="mb-2 bg-yellow-100 w-[200px] mx-auto py-1 rounded-lg text-xs font-semibold">
                 ID: {tasks[index].id}
               </p>
 
-              <p className="mb-2 bg-yellow-100 text-brown-700 w-[200px] py-1 mx-auto rounded-lg text-xs font-semibold">
+              <p className="mb-2 bg-yellow-100 w-[200px] py-1 mx-auto rounded-lg text-xs font-semibold">
                 Status: {tasks[index].status}
               </p>
 
-              <p className="mb-2 bg-yellow-100 text-brown-700 py-1 w-[200px] mx-auto rounded-lg text-xs font-semibold">
+              <p className="mb-2 bg-yellow-100 py-1 w-[200px] mx-auto rounded-lg text-xs font-semibold">
                 Priority: {tasks[index].priority}
               </p>
 
-              <p className="bg-yellow-100 text-brown-700 py-1 mx-auto rounded-lg w-[200px] text-xs font-semibold">
+              <p className="bg-yellow-100 py-1 mx-auto rounded-lg w-[200px] text-xs font-semibold">
                 Title: {tasks[index].title}
               </p>
             </div>
@@ -234,7 +237,7 @@ if (error instanceof Error)
               />
             </div>
 
-            <div className="w-[385px] bg-[#91a1c9] shadow-lg rounded-lg p-10 border-gray-400 text-center">
+            <div className="w-[385px] bg-[#91a1c9] shadow-lg rounded-lg p-10 text-center">
               <UpdateTask
               key={tasks[index].id}
                 task={tasks[index]}

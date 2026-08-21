@@ -23,7 +23,7 @@ router.get("/tasks", async (req, res) => {
   } 
   catch (error) 
   {
-    console.error(error);
+    console.error("did not fetch tasks " ,error);
 
     res.status(500).json({
       message: "Did not fetch tasks",
@@ -88,12 +88,12 @@ router.post("/tasks", async (req, res) => {
     });
 
     res.status(201).json(task);
-  } catch (error) {
-    console.error(error);
+  } catch (error) 
+  {
+    console.error("failed to create task" ,error);
 
     res.status(500).json({
       message: "Failed to create task",
-      error: String(error),
     });
   }
 });
@@ -123,11 +123,10 @@ router.get("/tasks/:id", async (req, res) => {
 
     res.json(task);
   } catch (error) {
-    console.error(error);
+    console.error("failed to fetch task" ,error);
 
     res.status(500).json({
       message: "Failed to fetch task",
-      error: error.message,
     });
   }
 });
@@ -199,7 +198,7 @@ router.patch("/tasks/:id", async (req, res) => {
 
     res.json(task);
   } catch (error) {
-    console.error(error);
+    console.error("failed to update task" ,error);
 
     if (error.code === "P2025") {
       return res.status(404).json({
@@ -209,7 +208,6 @@ router.patch("/tasks/:id", async (req, res) => {
 
     res.status(500).json({
       message: "Failed to update task",
-      error: error.message,
     });
   }
 });
@@ -235,7 +233,7 @@ router.delete("/tasks/:id", async (req, res) => {
       task: deletedTask,
     });
   } catch (error) {
-    console.error(error);
+    console.error("failed to delete task" ,error);
 
     if (error.code === "P2025") {
       return res.status(404).json({
@@ -245,7 +243,7 @@ router.delete("/tasks/:id", async (req, res) => {
 
     res.status(500).json({
       message: "Failed to delete task",
-      error: error.message,
+    
     });
   }
 });

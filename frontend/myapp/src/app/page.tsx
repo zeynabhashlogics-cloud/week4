@@ -11,7 +11,7 @@ export default function Home() {
         <h1 className="text-5xl font-bold mb-12 text-white text-left ">
           Finish More.
         </h1>
-        <p className= "italic mb-4 text-bold text-s text-left">A calm workspace to create, update, and clear your
+        <p className= "italic mb-4 font-bold text-sm text-left">A calm workspace to create, update, and clear your
           <br/>
            tasks - connected to a real Express API.</p>
 

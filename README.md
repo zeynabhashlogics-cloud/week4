@@ -27,6 +27,12 @@ The application allows users to create, view, update, and delete tasks. The back
 * Git
 * npm
 
+### Database
+
+* prisma
+* postgre sql
+* pg adapter
+
 # Features
 
 * View tasks
@@ -41,6 +47,30 @@ The application allows users to create, view, update, and delete tasks. The back
 * REST API
 * Separate frontend and backend
 * Environment variable configuration
+
+## database setup
+
+create DB
+setDATABASE_URL in.env
+npm install
+npx prisma generate
+npx prisma migrate dev
+npx prisma db seed
+npm run dev
+
+## user task relation
+
+we have one sample user and many sample tasks. it is a one to many relation. one user can have multiple tasks and each task should belong at least to one user.
+
+## steps to run the project 
+* open vs code
+* start your psql database
+* go to the backend
+* install any packages needed
+* set up prisma
+* seed the sample data
+* run the backend
+* open the new terminal and run the frontend too
 
 # Task Data
 
@@ -120,6 +150,7 @@ The following should be included in `.gitignore`:
 
 gitignore
 .env
+frontend/myapp/.env
 .env.local
 node_modules/
 
@@ -143,6 +174,7 @@ npm install
 Or start the production-style server:
 
 npm start
+npm run dev
 
 The backend runs on:
 
@@ -377,20 +409,6 @@ The strict `Task` type ensures that the state contains valid task objects.
 ---
 
 # Select Inputs and Union Types
-
-HTML select values are returned by the browser as `string`.
-
-For example:
-
-```tsx
-onChange={(e) => setPriority(e.target.value)}
-```
-
-If the state expects:
-
-```ts
-TaskPriority
-```
 
 TypeScript may complain because `e.target.value` is typed as `string`.
 

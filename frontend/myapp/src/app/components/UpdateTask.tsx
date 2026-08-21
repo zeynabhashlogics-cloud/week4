@@ -19,6 +19,8 @@ export default function UpdateTask({ task, Updated }: Props)
   const [apiError, setApiError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const [loading,setLoading]=useState(false);
+
 
   useEffect(() => {
     setTitle(task.title);
@@ -41,8 +43,9 @@ export default function UpdateTask({ task, Updated }: Props)
       {
       setTitleError("Title is required");
       return;
-    }
 
+    }
+setLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tasks/${task.id}`,
@@ -75,6 +78,9 @@ export default function UpdateTask({ task, Updated }: Props)
      {
       console.error(error);
       setApiError("Unable to connect to the server");
+    }
+    finally {
+      setLoading(false);
     }
   }
 
@@ -172,11 +178,13 @@ export default function UpdateTask({ task, Updated }: Props)
 
     
       <div className="flex gap-2 justify-center">
-        <button
+       <button
           type="submit"
-          className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600"
+          disabled ={loading}
+          className={loading ? "bg-yellow-400 text-white px-5 py-2 rounded-md ":" bg-blue-500 text-white px-5 py-2 rounded-md"
+          }
         >
-          Save
+          {loading? "submitting": "submit"}
         </button>
 
         <button
