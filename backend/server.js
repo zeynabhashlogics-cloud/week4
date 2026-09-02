@@ -1,34 +1,29 @@
 import express from "express";
-import cors from "cors";
-import routes from "./route/routes.js";
 import dotenv from "dotenv";
+import cors from "cors";
+
 
 dotenv.config();
-
-const PORT = process.env.PORT || 3002;
-
+import authRoutes from "./route/authRoutes.js";
+import taskRoutes from "./route/tasks.js";
 const app = express();
-
-app.use(cors({ origin: process.env.FRONTEND_URL,}));
+app.use(cors());
 app.use(express.json());
 
-app.get("/health", (req, res) =>
-   {
-  res.status(200).json({
+
+app.get("/health", (req, res) => {
+  res.json({
     message: "health works",
   });
 });
 
-app.use("/", routes);
 
-app.use((req, res) => 
-  {
-  res.status(404).json({
-    message: "Route not found",
-  });
-});
+app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
 
-app.listen(PORT, () => 
-  {
-  console.log(`Server is running on ${PORT}`);
+
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,16 +1,15 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import type { prioritytype, statustype, Task } from "../types/task";
 
-type Props = 
-{
+type Props = {
   task: Task;
   Updated: (task: Task) => void;
 };
 
-export default function UpdateTask({ task, Updated }: Props) 
-{
+export default function UpdateTask({ task, Updated }: Props) {
   const [title, setTitle] = useState(task.title);
   const [status, setStatus] = useState(task.status);
   const [priority, setPriority] = useState(task.priority);
@@ -19,8 +18,7 @@ export default function UpdateTask({ task, Updated }: Props)
   const [apiError, setApiError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [loading,setLoading]=useState(false);
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setTitle(task.title);
@@ -31,28 +29,35 @@ export default function UpdateTask({ task, Updated }: Props)
     setSuccessMessage("");
   }, [task]);
 
-  async function updateTask( event: React.FormEvent<HTMLFormElement>)
-   {
+  async function updateTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setTitleError("");
     setApiError("");
     setSuccessMessage("");
 
-    if (!title.trim()) 
-      {
+    if (!title.trim()) {
       setTitleError("Title is required");
       return;
-
     }
-setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setApiError("Please login first");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tasks/${task.id}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: title.trim(),
@@ -64,28 +69,28 @@ setLoading(true);
 
       const data = await response.json();
 
-      if (!response.ok) 
-        {
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        setApiError("Session expired. Please login again");
+        return;
+      }
+
+      if (!response.ok) {
         setApiError(data.message || "Failed to update task");
         return;
       }
 
       Updated(data);
       setSuccessMessage("Task updated successfully");
-
-    }
-     catch (error)
-     {
+    } catch (error) {
       console.error(error);
       setApiError("Unable to connect to the server");
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   }
 
-  function resetForm() 
-  {
+  function resetForm() {
     setTitle(task.title);
     setStatus(task.status);
     setPriority(task.priority);
@@ -96,7 +101,6 @@ setLoading(true);
 
   return (
     <form onSubmit={updateTask}>
-
       <h2 className="text-xl font-bold mb-4">
         Edit Task
       </h2>
@@ -113,7 +117,6 @@ setLoading(true);
         </p>
       )}
 
- 
       <div className="mb-4">
         <label className="block mb-1">
           Title
@@ -137,7 +140,6 @@ setLoading(true);
         )}
       </div>
 
-      
       <div className="mb-4">
         <label className="block mb-1">
           Status
@@ -156,7 +158,6 @@ setLoading(true);
         </select>
       </div>
 
-    
       <div className="mb-4">
         <label className="block mb-1">
           Priority
@@ -176,15 +177,17 @@ setLoading(true);
         </select>
       </div>
 
-    
       <div className="flex gap-2 justify-center">
-       <button
+        <button
           type="submit"
-          disabled ={loading}
-          className={loading ? "bg-yellow-400 text-white px-5 py-2 rounded-md ":" bg-blue-500 text-white px-5 py-2 rounded-md"
+          disabled={loading}
+          className={
+            loading
+              ? "bg-yellow-400 text-white px-5 py-2 rounded-md"
+              : "bg-blue-500 text-white px-5 py-2 rounded-md"
           }
         >
-          {loading? "submitting": "submit"}
+          {loading ? "submitting" : "submit"}
         </button>
 
         <button
@@ -195,7 +198,6 @@ setLoading(true);
           Cancel
         </button>
       </div>
-
     </form>
   );
 }

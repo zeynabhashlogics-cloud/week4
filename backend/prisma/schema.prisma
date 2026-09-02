@@ -1,5 +1,5 @@
 generator client {
- provider = "prisma-client"
+  provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
@@ -7,21 +7,21 @@ datasource db {
   provider = "postgresql"
 }
 
-model user{
-id Int @id @default(autoincrement())
-name String @db.VarChar(100)
-age Int
-tasks tasks[]
+model user {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
 
+  tasks    tasks[]
 }
 
 model tasks {
   id       Int    @id @default(autoincrement())
-  title    String @db.VarChar(255)
-  status   String @db.VarChar(20)
-  priority String @db.VarChar(20)
+  title    String  @db.VarChar(255)
+  status   String  @db.VarChar(20)
+  priority String  @db.VarChar(20)
 
-  userId Int
-  user user @relation(fields: [userId], references: [id])
+  userId   Int
+  user     user @relation(fields: [userId], references: [id])
 }
-

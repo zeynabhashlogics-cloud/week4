@@ -1,5 +1,7 @@
+
 import "dotenv/config";
 
+import bcrypt from "bcrypt";
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -10,13 +12,17 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+
   await prisma.tasks.deleteMany();
   await prisma.user.deleteMany();
+
+  const hashedPassword = await bcrypt.hash("12345678", 10);
 
   const user = await prisma.user.create({
     data: {
       name: "Test User",
-      age: 20,
+      email: "test@example.com",
+      password: hashedPassword,
     },
   });
 
@@ -48,9 +54,10 @@ async function main() {
 
 main()
   .catch((error) => {
-    console.log(error);
+    console.error(error);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
   });
+

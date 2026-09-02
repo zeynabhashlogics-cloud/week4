@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState } from "react";
-import type { Task , statustype, prioritytype} from "../types/task";
+import type { Task, statustype, prioritytype } from "../types/task";
 
 type Props = {
   Added: (task: Task) => void;
@@ -10,9 +11,8 @@ type Props = {
 export default function AddTask({ Added }: Props) {
   const [title, setTitle] = useState("");
 
-  const [priority, setPriority] = useState <prioritytype | "" > ("") ;
-  const [status, setStatus] = useState <statustype | "" > ("")
-
+  const [priority, setPriority] = useState<prioritytype | "">("");
+  const [status, setStatus] = useState<statustype | "">("");
 
   const [titleError, setTitleError] = useState("");
   const [prioError, setPrioError] = useState("");
@@ -20,7 +20,7 @@ export default function AddTask({ Added }: Props) {
 
   const [apiError, setApiError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function Submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,8 +31,6 @@ export default function AddTask({ Added }: Props) {
     setApiError("");
     setSuccessMessage("");
 
-
-  
     if (!title.trim()) {
       setTitleError("Title is required");
       return;
@@ -47,7 +45,16 @@ export default function AddTask({ Added }: Props) {
       setStatusError("Invalid status");
       return;
     }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setApiError("Please login first");
+      return;
+    }
+
     setLoading(true);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tasks`,
@@ -55,17 +62,23 @@ export default function AddTask({ Added }: Props) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: title.trim(),
             status,
             priority,
-            
           }),
         }
       );
 
       const data = await response.json();
+
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        setApiError("Session expired. Please login again");
+        return;
+      }
 
       if (!response.ok) {
         setApiError(data.message || "Failed to add task");
@@ -73,20 +86,19 @@ export default function AddTask({ Added }: Props) {
       }
 
       Added(data);
-      setSuccessMessage("Task added successfully");
-      clearForm();
 
+      setSuccessMessage("Task added successfully");
+
+      clearForm();
     } catch (error) {
       console.error(error);
       setApiError("Unable to connect to the server");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   }
 
-  function clearForm() 
-  {
+  function clearForm() {
     setTitle("");
     setPriority("");
     setStatus("");
@@ -98,7 +110,6 @@ export default function AddTask({ Added }: Props) {
 
   return (
     <form onSubmit={Submit}>
-
       <h2 className="text-xl font-bold mb-4">
         Add Task
       </h2>
@@ -115,12 +126,9 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-    
       <input
         type="text"
-         
         value={title}
-      
         onChange={(e) => {
           setTitle(e.target.value);
           setTitleError("");
@@ -136,7 +144,6 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-  
       <select
         value={priority}
         onChange={(e) => {
@@ -158,7 +165,6 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-  
       <select
         value={status}
         onChange={(e) => {
@@ -179,15 +185,17 @@ export default function AddTask({ Added }: Props) {
         </p>
       )}
 
-    
       <div className="flex gap-2 justify-center mt-4">
         <button
           type="submit"
-          disabled ={loading}
-          className={loading ? "bg-yellow-400 text-white px-5 py-2 rounded-md ":" bg-blue-500 text-white px-5 py-2 rounded-md"
+          disabled={loading}
+          className={
+            loading
+              ? "bg-yellow-400 text-white px-5 py-2 rounded-md"
+              : "bg-blue-500 text-white px-5 py-2 rounded-md"
           }
         >
-          {loading? "submitting": "submit"}
+          {loading ? "submitting" : "submit"}
         </button>
 
         <button
@@ -198,7 +206,6 @@ export default function AddTask({ Added }: Props) {
           Clear
         </button>
       </div>
-
     </form>
   );
 }
