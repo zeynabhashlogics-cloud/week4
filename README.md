@@ -1,568 +1,73 @@
 
-# Task Management CRUD App
-
-A full-stack Task Management CRUD application built with **Next.js, TypeScript, Tailwind CSS and Express.js.
-
-The application allows users to create, view, update, and delete tasks. The backend provides a REST API, while the frontend provides the user interface.
-
-
-### Frontend
-
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-
-### Backend
-
-* Node.js
-* Express.js
-* JavaScript
-* CORS
-* dotenv
-
-### Development Tools
-
-* VS Code
-* Git
-* npm
-
-### Database
-
-* prisma
-* postgre sql
-* pg adapter
-
-# Features
-
-* View tasks
-* Create a task
-* Update a task
-* Delete a task
-* Task status validation
-* Task priority validation
-* Clear success and error messages
-* TypeScript strict task types
-* Responsive UI with Tailwind CSS
-* REST API
-* Separate frontend and backend
-* Environment variable configuration
-
-## database setup
-
-create DB
-setDATABASE_URL in.env
-npm install
-npx prisma generate
-npx prisma migrate dev
-npx prisma db seed
-npm run dev
-
-## user task relation
-
-we have one sample user and many sample tasks. it is a one to many relation. one user can have multiple tasks and each task should belong at least to one user.
-
-## steps to run the project 
-* open vs code
-* start your psql database
-* go to the backend
-* install any packages needed
-* set up prisma
-* seed the sample data
-* run the backend
-* open the new terminal and run the frontend too
-
-# Task Data
-
-Each task contains:
-
-* id
-* title
-* status
-* priority
-
-The allowed status values are:
-
-* pending
-* completed
-
-The allowed priority values are:
-
-* low
-* medium
-* high
-
-# TypeScript Types
-
-The frontend uses strict union types instead of allowing any string.
-
-export type TaskStatus = "pending" | "completed";
-
-export type TaskPriority = "low" | "medium" | "high";
-
-export type Task = {
-  id: number;
-  title: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-};
-
-
-This prevents invalid values from being used in TypeScript code.
-
-# Backend Validation
-
-const validPriority = ["low", "medium", "high"];
-const validStatus = ["pending", "completed"];
-
-if (
-  typeof title !== "string" ||
-  typeof status !== "string" ||
-  typeof priority !== "string"
-) {
-  return res.status(400).json({
-    message: "Title, status, and priority must be strings.",
-  });
-}
-
-if (!validPriority.includes(priority)) {
-  return res.status(400).json({
-    message: "Priority must be low, medium, or high.",
-  });
-}
-
-if (!validStatus.includes(status)) {
-  return res.status(400).json({
-    message: "Status must be pending or completed.",
-  });
-}
-
-
-# Environment Variables
-
-Environment variables are used to store configuration separately from the source code.
-
-# Security
-
-Actual `.env` files should not be committed to Git.
-
-The following should be included in `.gitignore`:
-
-gitignore
-.env
-frontend/myapp/.env
-.env.local
-node_modules/
-
-The example files can be committed:
-
-.env.example
-
-The example files show developers which variables they need without exposing actual passwords or secrets.
-
-
-# Backend Setup
-
-Navigate to the backend:
-
-cd backend
-
-Install dependencies:
-
-npm install
-
-Or start the production-style server:
-
-npm start
-npm run dev
-
-The backend runs on:
-
-
-http://localhost:3002
-
-# Frontend Setup
-
-Navigate to the Next.js application:
-
-
-cd frontend/myapp
-
-Install dependencies:
-
-npm install
-
-Start the development server:
-
-npm run dev
-
-
-The frontend normally runs on:
-
-http://localhost:3000
-
-
-If port 3000 is already being used, Next.js may start on another available port.
-
-
-# API Endpoints
-
-The backend provides the following REST API.
-
-| Method | Endpoint     | Request Body                  | Description   |
-| ------ | ------------ | ----------------------------- | ------------- |
-| GET    | `/tasks`     | None                          | Get all tasks |
-| GET    | `/tasks/:id` | None                          | Get one task  |
-| POST   | `/tasks`     | `title`, `status`, `priority` | Create a task |
-| PATCH  | `/tasks/:id` | `title`, `status`, `priority` | Update a task |
-| DELETE | `/tasks/:id` | None                          | Delete a task |
-
----
-
-# GET /tasks
-
-Returns all tasks.
-
-### Request
-
-```http
-GET /tasks
-```
-
-### Example response
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Learn PostgreSQL",
-    "status": "completed",
-    "priority": "high"
-  },
-  {
-    "id": 2,
-    "title": "Learn Prisma",
-    "status": "pending",
-    "priority": "high"
-  }
-]
-```
-
----
-
-# GET /tasks/:id
-
-Returns one task.
-
-### Request
-
-```http
-GET /tasks/1
-```
-
-### Example response
-
-```json
-{
-  "id": 1,
-  "title": "Learn PostgreSQL",
-  "status": "completed",
-  "priority": "high"
-}
-```
-
-If the task doesn't exist:
-
-```json
-{
-  "message": "Task with ID 1 was not found."
-}
-```
-
----
-
-# POST /tasks
-
-Creates a new task.
-
-### Request
-
-```http
-POST /tasks
-```
-
-### Request body
-
-```json
-{
-  "title": "Learn Prisma",
-  "status": "pending",
-  "priority": "high"
-}
-```
-
-### Successful response
-
-```json
-{
-  "message": "Task created successfully.",
-  "task": {
-    "id": 3,
-    "title": "Learn Prisma",
-    "status": "pending",
-    "priority": "high"
-  }
-}
-```
-
-### Validation
-
-The backend checks that:
-
-* `title` is a string
-* `status` is a string
-* `priority` is a string
-* `status` is either `pending` or `completed`
-* `priority` is `low`, `medium`, or `high`
-* `title` is not empty
-
----
-
-# PATCH /tasks/:id
-
-Updates an existing task.
-
-### Request
-
-```http
-PATCH /tasks/3
-```
-
-### Request body
-
-```json
-{
-  "title": "Learn Prisma ORM",
-  "status": "completed",
-  "priority": "high"
-}
-```
-
-### Successful response
-
-```json
-{
-  "message": "Task updated successfully.",
-  "task": {
-    "id": 3,
-    "title": "Learn Prisma ORM",
-    "status": "completed",
-    "priority": "high"
-  }
-}
-```
-
-If the task doesn't exist:
-
-```json
-{
-  "message": "Task with ID 3 was not found."
-}
-```
-
----
-
-# DELETE /tasks/:id
-
-Deletes a task.
-
-### Request
-
-```http
-DELETE /tasks/3
-```
-
-### Successful response
-
-```json
-{
-  "message": "Task deleted successfully."
-}
-```
-
-The frontend can display this message to the user after a successful deletion.
-
----
-
-# React Task State
-
-The frontend stores tasks using React state.
-
-Example:
-
-```tsx
-const [tasks, setTasks] = useState<Task[]>([]);
-```
-
-The strict `Task` type ensures that the state contains valid task objects.
-
----
-
-# Select Inputs and Union Types
-
-TypeScript may complain because `e.target.value` is typed as `string`.
-
-The value can be narrowed to the union type:
-
-```tsx
-onChange={(e) =>
-  setPriority(e.target.value as TaskPriority)
-}
-```
-
-Similarly:
-
-```tsx
-onChange={(e) =>
-  setStatus(e.target.value as TaskStatus)
-}
-```
-
-Example:
-
-```tsx
-<select
-  value={priority}
-  onChange={(e) =>
-    setPriority(e.target.value as TaskPriority)
-  }
->
-  <option value="low">Low</option>
-  <option value="medium">Medium</option>
-  <option value="high">High</option>
-</select>
-```
-
----
-
-# UpdateTask Component
-
-When displaying the update form, the parent passes the task ID as the React key:
-
-```tsx
-<UpdateTask
-  key={task.id}
-  task={task}
-/>
-```
-
-This helps React correctly recreate the component when the displayed task changes.
-
-This is especially useful when `UpdateTask` contains its own state.
-
-# tailwind
-
-The frontend uses Tailwind CSS for styling.
-
-Examples:
-
-```tsx
-className="bg-blue-600 text-white px-4 py-2 rounded-md"
-```
-
-Disabled buttons can use:
-
-```tsx
-className="disabled:bg-gray-400"
-```
-
-The `postcss.config.mjs` file belongs inside the Next.js application:
+# Task Management Application
+
+A full-stack task management app built with **Next.js, Express.js, PostgreSQL, Prisma, TypeScript, and Tailwind CSS**.
+
+## Features
+
+* User registration and login
+* Password hashing with **bcrypt**
+* JWT-based authentication
+* Protected task routes
+* User-specific tasks
+* Create, read, update, and delete tasks
+* Task validation
+* Email normalization using `trim()` and `toLowerCase()`
+* Logout functionality
+* JWT stored in `localStorage`
+* Prisma ORM with PostgreSQL
+* Seed data for testing
+* `.env.example` without real secrets
+
+## Authentication Flow
 
 ```text
-frontend/myapp/postcss.config.mjs
+Register
+   ↓
+Validate user
+   ↓
+Hash password with bcrypt
+   ↓
+Store user in PostgreSQL
+
+Login
+   ↓
+Verify password
+   ↓
+Generate JWT
+   ↓
+Store token in localStorage
+   ↓
+Access protected tasks
 ```
 
----
+## Task Authorization
 
-# Error Handling
-
-The backend returns meaningful HTTP status codes and messages.
-
-Examples:
-
-### Bad request
-
-```json
-{
-  "message": "Priority must be low, medium, or high."
-}
-```
-
-Status:
+Each task has a `userId`.
 
 ```text
-400 Bad Request
+User
+ ├── Task
+ ├── Task
+ └── Task
 ```
 
-### Not found
+The backend uses the authenticated user's ID (`req.user.id`) so users can only access and modify their own tasks.
 
-```json
-{
-  "message": "Task with ID 10 was not found."
-}
-```
+## API Endpoints
 
-Status:
+| Method    | Endpoint         | Purpose          |
+| --------- | ---------------- | ---------------- |
+| POST      | `/auth/register` | Register         |
+| POST      | `/auth/login`    | Login            |
+| GET       | `/tasks`         | Get user's tasks |
+| POST      | `/tasks`         | Create task      |
+| GET       | `/tasks/:id`     | Get task by ID   |
+| PUT/PATCH | `/tasks/:id`     | Update task      |
+| DELETE    | `/tasks/:id`     | Delete task      |
 
-```text
-404 Not Found
-```
+## Tech Stack
 
-### Successful deletion
-
-```json
-{
-  "message": "Task deleted successfully."
-}
-```
-
-Status:
-
-```text
-200 OK
-```
-
-Clear messages allow the frontend to display useful feedback instead of vague messages such as `"error"`.
-
----
-
-# Running the Complete Project
-
-# Project Architecture
-
-The final architecture is:
-
-                    ┌──────────────────┐
-                    │   Next.js UI     │
-                    │   TypeScript     │
-                    └────────┬─────────┘
-                             │
-                             │ HTTP
-                             ▼
-                    ┌──────────────────┐
-                    │  Express API     │
-                    │   Validation     │
-                    └────────┬─────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │     Prisma       │
-                    │  Prisma Client   │
-                    └────────┬─────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │   PostgreSQL     │
-                    │   task database  │
-                    └──────────────────┘
-
+**Frontend:** Next.js, React, TypeScript, Tailwind CSS
+**Backend:** Node.js, Express.js, TypeScript, JWT, bcrypt
+**Database:** PostgreSQL + Prisma
