@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <main className="min-h-screen bg-[#b8ccd1] p-8">
+    <main className="min-h-screen bg-[#ffffff] p-8">
 
       <div className="max-w-5xl mx-auto bg-[#176b4d] rounded-2xl p-10 mb-6">
         <h1 className="text-4xl font-bold text-white mb-8">
@@ -47,7 +47,7 @@ export default function About() {
 
         <div className="grid grid-cols-3 gap-6">
 
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="bg-[#b3c4b4] rounded-xl p-6 shadow-sm">
             <h3 className="font-bold text-xl mb-2">
               Frontend
             </h3>
@@ -59,7 +59,7 @@ export default function About() {
 </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="bg-[#b3c4b4] rounded-xl p-6 shadow-sm">
             <h3 className="font-bold text-xl mb-2">
               Backend
             </h3>

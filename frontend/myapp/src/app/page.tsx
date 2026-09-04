@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#dbd0b8] flex flex-col items-center justify-center">
+    <main className="min-h-screen bg-[#ffffff] flex flex-col items-center justify-center">
 
       <div className="bg-[#6591a6] border rounded-lg p-25 w-[900px] text-center flex flex-col">
 

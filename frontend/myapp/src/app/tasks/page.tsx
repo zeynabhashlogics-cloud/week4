@@ -14,7 +14,6 @@ export default function TaskPage() {
   const [error, setError] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
 
-
   useEffect(() => {
     async function loadTasks() {
       const token = localStorage.getItem("token");
@@ -124,7 +123,6 @@ export default function TaskPage() {
     }
   }
 
-
   function TaskAdded(newTask: Task) {
     setTasks((prev) => {
       const newTasks = [...prev, newTask];
@@ -150,6 +148,17 @@ export default function TaskPage() {
 
     setError("");
   }
+
+
+  const totalTasks = tasks.length;
+
+  const completedTasks = tasks.filter(
+    (task) => task.status === "completed"
+  ).length;
+
+  const pendingTasks = tasks.filter(
+    (task) => task.status === "pending"
+  ).length;
 
   if (loading) {
     return (
@@ -188,7 +197,8 @@ export default function TaskPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-[#e0e8cf] py-10">
+    <div className="min-h-screen flex flex-col items-center bg-[#ffffff] py-10">
+
       <h1 className="text-3xl font-bold text-left mb-6">
         Your Tasks
       </h1>
@@ -198,6 +208,41 @@ export default function TaskPage() {
           {error}
         </p>
       )}
+
+     
+      <div className="flex gap-4 mb-8">
+
+        <div className="bg-[#d0d6d5] shadow-md rounded-lg px-8 py-4 text-center">
+          <p className="text-sm font-semibold">
+            Total Tasks
+          </p>
+
+          <p className="text-2xl font-bold">
+            {totalTasks}
+          </p>
+        </div>
+
+        <div className="bg-green-100 shadow-md rounded-lg px-8 py-4 text-center">
+          <p className="text-sm font-semibold">
+            Completed
+          </p>
+
+          <p className="text-2xl font-bold text-green-700">
+            {completedTasks}
+          </p>
+        </div>
+
+        <div className="bg-yellow-100 shadow-md rounded-lg px-8 py-4 text-center">
+          <p className="text-sm font-semibold">
+            Pending
+          </p>
+
+          <p className="text-2xl font-bold text-yellow-700">
+            {pendingTasks}
+          </p>
+        </div>
+
+      </div>
 
       {tasks.length === 0 ? (
         <div className="w-[500px] bg-white border rounded-lg p-10">
@@ -209,6 +254,7 @@ export default function TaskPage() {
         </div>
       ) : (
         <>
+         
           <div className="bg-[#9fb079] shadow-lg text-center rounded-lg p-10 w-[800px]">
 
             <div className="mb-6">
@@ -249,6 +295,7 @@ export default function TaskPage() {
                 Next
               </button>
 
+          
               <button
                 onClick={() => {
                   const confirmDelete = window.confirm(
@@ -267,6 +314,7 @@ export default function TaskPage() {
             </div>
           </div>
 
+          
           <div className="flex gap-6 justify-center items-start mt-8">
 
             <div className="w-[385px] bg-[#91a1c9] shadow-lg rounded-lg p-10 text-center">
@@ -289,6 +337,3 @@ export default function TaskPage() {
     </div>
   );
 }
-
-
-
